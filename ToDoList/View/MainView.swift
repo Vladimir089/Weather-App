@@ -78,8 +78,8 @@ class MainView: UIView {
         
         let labeltemp: UILabel = {
             let label = UILabel()
-            label.text = "\(Int(weather?.main.temp ?? 1))"
-            label.font = .systemFont(ofSize: 140, weight: .light)
+            label.text = "\(String(weather?.main.temp ?? 1))°C"
+            label.font = .systemFont(ofSize: 100, weight: .light)
             label.textColor = .white
             label.numberOfLines = 0
             return label
@@ -98,7 +98,7 @@ class MainView: UIView {
         }()
         addSubview(middleView)
         middleView.snp.makeConstraints { make in
-            make.top.equalTo(labeltemp).inset(200)
+            make.top.equalTo(labeltemp).inset(150)
             make.height.equalTo(400)
             make.width.equalTo(350)
             make.centerX.equalToSuperview()
@@ -127,10 +127,93 @@ class MainView: UIView {
         }
         
        
+        let viewMainMinMaxTemp: UIView = {
+            let view = UIView()
+            view.clipsToBounds  = true
+            view.backgroundColor = .clear
+            view.layer.cornerRadius = 2
+            return view
+        }()
         
+        middleView.addSubview(viewMainMinMaxTemp)
+        viewMainMinMaxTemp.snp.makeConstraints { make in
+            make.height.equalTo(5)
+            make.top.equalToSuperview().inset(30)
+            make.left.right.equalToSuperview().inset(30)
+        }
+
+        let progressViewMinMax: UIProgressView = {
+            let view = UIProgressView()
+
+            // Вычисляем прогресс текущей температуры в пределах от минимальной до максимальной
+            guard let minTemperature = weather?.main.tempMin,
+                  let maxTemperature = weather?.main.tempMax,
+                  let currentTemperature = weather?.main.temp else {
+                return view
+            }
+            let progress = (currentTemperature - minTemperature) / (maxTemperature - minTemperature)
+
+            // Создаем градиент
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.frame = CGRect(x: 0, y: 0, width: 200, height: 4) // Установите желаемые размеры
+            gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
+            gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
+
+            // Создаем массив цветов для градиента с плавным переходом от синего к красному
+            let colors = [UIColor.blue.cgColor, UIColor.cyan.cgColor, UIColor.green.cgColor, UIColor.yellow.cgColor, UIColor.orange.cgColor, UIColor.red.cgColor]
+            let locations: [NSNumber] = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+            gradientLayer.colors = colors
+            gradientLayer.locations = locations
+
+            // Создаем изображение из градиентного слоя
+            UIGraphicsBeginImageContextWithOptions(gradientLayer.bounds.size, false, 0.0)
+            gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            // Устанавливаем изображение как фон прогресс-вью
+            view.trackImage = image
+
+            // Устанавливаем прогресс в соответствии с текущей температурой
+            view.setProgress(Float(progress), animated: true)
+
+            return view
+        }()
+
+
+        viewMainMinMaxTemp.addSubview(progressViewMinMax)
+        progressViewMinMax.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.left.right.equalToSuperview().inset(-1)
+            
+        }
         
+
+        let minTepLabel: UILabel = {
+            let label = UILabel()
+            label.text = "\(String(weather?.main.tempMin ?? 1))°C"
+            label.font = .systemFont(ofSize: 20, weight: .medium)
+            label.textColor = .systemBlue
+            return label
+        }()
+        middleView.addSubview(minTepLabel)
+        minTepLabel.snp.makeConstraints { make in
+            make.top.equalTo(viewMainMinMaxTemp).inset(10)
+            make.left.equalToSuperview().inset(30)
+        }
         
-        
+        let maxTepLabel: UILabel = {
+            let label = UILabel()
+            label.text = "\(String(weather?.main.tempMax ?? 1))°C"
+            label.font = .systemFont(ofSize: 20, weight: .medium)
+            label.textColor = .systemBlue
+            return label
+        }()
+        middleView.addSubview(maxTepLabel)
+        maxTepLabel.snp.makeConstraints { make in
+            make.top.equalTo(viewMainMinMaxTemp).inset(10)
+            make.right.equalToSuperview().inset(30)
+        }
         
     }
 }
