@@ -10,16 +10,20 @@ import SnapKit
 
 class MainView: UIView {
     
+    var collectionView: UICollectionView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupGradientBackground()
-        
+
+
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupGradientBackground()
+
+
     }
     
     private func setupGradientBackground() {
@@ -78,7 +82,7 @@ class MainView: UIView {
         
         let labeltemp: UILabel = {
             let label = UILabel()
-            label.text = "\(String(weather?.main.temp ?? 1))°C"
+            label.text = "\(String(Int(weather?.main.temp ?? 1)))"
             label.font = .systemFont(ofSize: 100, weight: .light)
             label.textColor = .white
             label.numberOfLines = 0
@@ -90,130 +94,105 @@ class MainView: UIView {
             make.centerX.equalToSuperview()
         }
         
-        let middleView: UIView = {
-            let view = UIView()
-            view.backgroundColor = .white
-            view.layer.cornerRadius = 30
-            return view
-        }()
-        addSubview(middleView)
-        middleView.snp.makeConstraints { make in
-            make.top.equalTo(labeltemp).inset(150)
-            make.height.equalTo(400)
-            make.width.equalTo(350)
-            make.centerX.equalToSuperview()
-        }
-        
-        middleView.layer.shadowColor = UIColor.black.cgColor
-        middleView.layer.shadowOpacity = 0.5
-        middleView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        middleView.layer.shadowRadius = 4
-        middleView.layer.masksToBounds = false
-        
         if let weatherDescription = weather?.weather.first?.description {
-            let labelDop: UILabel = {
-                let label = UILabel()
-                label.font = .systemFont(ofSize: 25, weight: .light)
-                label.text = weatherDescription
-                label.textColor = .white
-                return label
-            }()
-            
-            addSubview(labelDop)
-            labelDop.snp.makeConstraints { make in
-                make.bottom.equalTo(labeltemp).inset(-5)
-                make.centerX.equalToSuperview()
+                let labelDop: UILabel = {
+                    let label = UILabel()
+                    label.font = .systemFont(ofSize: 25, weight: .light)
+                    label.text = weatherDescription
+                    label.textColor = .white
+                    return label
+                }()
+    
+                addSubview(labelDop)
+                labelDop.snp.makeConstraints { make in
+                    make.bottom.equalTo(labeltemp).inset(-10)
+                    make.centerX.equalToSuperview()
+                }
             }
-        }
         
-       
-        let viewMainMinMaxTemp: UIView = {
-            let view = UIView()
-            view.clipsToBounds  = true
-            view.backgroundColor = .clear
-            view.layer.cornerRadius = 2
-            return view
+        collectionView = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .vertical
+            let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            collection.dataSource = self
+            collection.delegate = self
+            collection.showsHorizontalScrollIndicator = false
+            collection.showsVerticalScrollIndicator = false
+            collection.backgroundColor = .clear
+            collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "1")
+            collection.register(MinMaxCell.self, forCellWithReuseIdentifier: "2")
+            collection.register(FellsCollectionViewCell.self, forCellWithReuseIdentifier: "3")
+            collection.register(HumidityCollectionViewCell.self, forCellWithReuseIdentifier: "4")
+            collection.register(PressureCollectionViewCell.self, forCellWithReuseIdentifier: "5")
+            collection.register(UFIndexCollectionViewCell.self, forCellWithReuseIdentifier: "6")
+            collection.register(WindCollectionViewCell.self, forCellWithReuseIdentifier: "7")
+            return collection
         }()
         
-        middleView.addSubview(viewMainMinMaxTemp)
-        viewMainMinMaxTemp.snp.makeConstraints { make in
-            make.height.equalTo(5)
-            make.top.equalToSuperview().inset(30)
-            make.left.right.equalToSuperview().inset(30)
-        }
-
-        let progressViewMinMax: UIProgressView = {
-            let view = UIProgressView()
-
-            // Вычисляем прогресс текущей температуры в пределах от минимальной до максимальной
-            guard let minTemperature = weather?.main.tempMin,
-                  let maxTemperature = weather?.main.tempMax,
-                  let currentTemperature = weather?.main.temp else {
-                return view
-            }
-            let progress = (currentTemperature - minTemperature) / (maxTemperature - minTemperature)
-
-            // Создаем градиент
-            let gradientLayer = CAGradientLayer()
-            gradientLayer.frame = CGRect(x: 0, y: 0, width: 200, height: 4) // Установите желаемые размеры
-            gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-            gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-
-            // Создаем массив цветов для градиента с плавным переходом от синего к красному
-            let colors = [UIColor.blue.cgColor, UIColor.cyan.cgColor, UIColor.green.cgColor, UIColor.yellow.cgColor, UIColor.orange.cgColor, UIColor.red.cgColor]
-            let locations: [NSNumber] = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
-            gradientLayer.colors = colors
-            gradientLayer.locations = locations
-
-            // Создаем изображение из градиентного слоя
-            UIGraphicsBeginImageContextWithOptions(gradientLayer.bounds.size, false, 0.0)
-            gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-
-            // Устанавливаем изображение как фон прогресс-вью
-            view.trackImage = image
-
-            // Устанавливаем прогресс в соответствии с текущей температурой
-            view.setProgress(Float(progress), animated: true)
-
-            return view
-        }()
-
-
-        viewMainMinMaxTemp.addSubview(progressViewMinMax)
-        progressViewMinMax.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.left.right.equalToSuperview().inset(-1)
+        addSubview(collectionView!)
+        collectionView!.snp.makeConstraints { make in
+            make.top.equalTo(labeltemp).inset(130)
+            make.left.right.bottom.equalToSuperview()
             
         }
-        
+    }
+}
 
-        let minTepLabel: UILabel = {
-            let label = UILabel()
-            label.text = "\(String(weather?.main.tempMin ?? 1))°C"
-            label.font = .systemFont(ofSize: 20, weight: .medium)
-            label.textColor = .systemBlue
-            return label
-        }()
-        middleView.addSubview(minTepLabel)
-        minTepLabel.snp.makeConstraints { make in
-            make.top.equalTo(viewMainMinMaxTemp).inset(10)
-            make.left.equalToSuperview().inset(30)
-        }
+
+extension MainView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 6
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let maxTepLabel: UILabel = {
-            let label = UILabel()
-            label.text = "\(String(weather?.main.tempMax ?? 1))°C"
-            label.font = .systemFont(ofSize: 20, weight: .medium)
-            label.textColor = .systemBlue
-            return label
-        }()
-        middleView.addSubview(maxTepLabel)
-        maxTepLabel.snp.makeConstraints { make in
-            make.top.equalTo(viewMainMinMaxTemp).inset(10)
-            make.right.equalToSuperview().inset(30)
+        switch indexPath.row {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "2", for: indexPath) as! MinMaxCell
+            cell.layer.cornerRadius = 20
+            return cell
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "3", for: indexPath) as! FellsCollectionViewCell
+            cell.layer.cornerRadius = 20
+            return cell
+        case 2:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "4", for: indexPath) as! HumidityCollectionViewCell
+            cell.layer.cornerRadius = 20
+            return cell
+        case 3:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "5", for: indexPath) as! PressureCollectionViewCell
+            cell.layer.cornerRadius = 20
+            return cell
+        case 4:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "6", for: indexPath) as! UFIndexCollectionViewCell
+            cell.layer.cornerRadius = 20
+            return cell
+        case 5:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "7", for: indexPath) as! WindCollectionViewCell
+            cell.layer.cornerRadius = 20
+            return cell
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "1", for: indexPath)
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        switch indexPath.row {
+        case 0:
+            return CGSize(width: frame.width - 20, height: 70)
+        case 5:
+            return CGSize(width: frame.width - 20, height: 140)
+        default:
+            return CGSize(width: 180, height: 180)
+            
         }
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    }
+
+    
 }

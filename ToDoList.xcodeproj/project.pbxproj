@@ -17,6 +17,12 @@
 		1571DC0F2B87777000F21450 /* GetLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1571DC0E2B87777000F21450 /* GetLocation.swift */; };
 		15AF6CE52B87A82000F9ADDD /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CE42B87A82000F9ADDD /* Weather.swift */; };
 		15AF6CE72B87C94200F9ADDD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CE62B87C94200F9ADDD /* MainView.swift */; };
+		15AF6CE92B8A3FF200F9ADDD /* MinMaxCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CE82B8A3FF200F9ADDD /* MinMaxCell.swift */; };
+		15AF6CEC2B8A461B00F9ADDD /* FellsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CEB2B8A461B00F9ADDD /* FellsCollectionViewCell.swift */; };
+		15AF6CEE2B8A4B0300F9ADDD /* HumidityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CED2B8A4B0300F9ADDD /* HumidityCollectionViewCell.swift */; };
+		15AF6CF02B8A4DB400F9ADDD /* PressureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CEF2B8A4DB400F9ADDD /* PressureCollectionViewCell.swift */; };
+		15AF6CF22B8A528900F9ADDD /* UFIndexCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CF12B8A528900F9ADDD /* UFIndexCollectionViewCell.swift */; };
+		15AF6CF42B8A632300F9ADDD /* WindCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15AF6CF32B8A632300F9ADDD /* WindCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +49,12 @@
 		1571DC0E2B87777000F21450 /* GetLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLocation.swift; sourceTree = "<group>"; };
 		15AF6CE42B87A82000F9ADDD /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		15AF6CE62B87C94200F9ADDD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		15AF6CE82B8A3FF200F9ADDD /* MinMaxCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinMaxCell.swift; sourceTree = "<group>"; };
+		15AF6CEB2B8A461B00F9ADDD /* FellsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FellsCollectionViewCell.swift; sourceTree = "<group>"; };
+		15AF6CED2B8A4B0300F9ADDD /* HumidityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumidityCollectionViewCell.swift; sourceTree = "<group>"; };
+		15AF6CEF2B8A4DB400F9ADDD /* PressureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PressureCollectionViewCell.swift; sourceTree = "<group>"; };
+		15AF6CF12B8A528900F9ADDD /* UFIndexCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UFIndexCollectionViewCell.swift; sourceTree = "<group>"; };
+		15AF6CF32B8A632300F9ADDD /* WindCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +112,7 @@
 		1571DC002B85003000F21450 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				15AF6CEA2B8A419E00F9ADDD /* Cells */,
 				1571DBF62B84FD4700F21450 /* LaunchScreen.storyboard */,
 				1571DBF42B84FD4700F21450 /* Assets.xcassets */,
 				15AF6CE62B87C94200F9ADDD /* MainView.swift */,
@@ -120,6 +133,19 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		15AF6CEA2B8A419E00F9ADDD /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				15AF6CE82B8A3FF200F9ADDD /* MinMaxCell.swift */,
+				15AF6CEB2B8A461B00F9ADDD /* FellsCollectionViewCell.swift */,
+				15AF6CED2B8A4B0300F9ADDD /* HumidityCollectionViewCell.swift */,
+				15AF6CEF2B8A4DB400F9ADDD /* PressureCollectionViewCell.swift */,
+				15AF6CF12B8A528900F9ADDD /* UFIndexCollectionViewCell.swift */,
+				15AF6CF32B8A632300F9ADDD /* WindCollectionViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,10 +228,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				1571DBF02B84FD4400F21450 /* ViewController.swift in Sources */,
+				15AF6CE92B8A3FF200F9ADDD /* MinMaxCell.swift in Sources */,
 				15AF6CE72B87C94200F9ADDD /* MainView.swift in Sources */,
 				1571DC0F2B87777000F21450 /* GetLocation.swift in Sources */,
 				1571DBEC2B84FD4400F21450 /* AppDelegate.swift in Sources */,
+				15AF6CEC2B8A461B00F9ADDD /* FellsCollectionViewCell.swift in Sources */,
 				1571DBEE2B84FD4400F21450 /* SceneDelegate.swift in Sources */,
+				15AF6CF22B8A528900F9ADDD /* UFIndexCollectionViewCell.swift in Sources */,
+				15AF6CF42B8A632300F9ADDD /* WindCollectionViewCell.swift in Sources */,
+				15AF6CEE2B8A4B0300F9ADDD /* HumidityCollectionViewCell.swift in Sources */,
+				15AF6CF02B8A4DB400F9ADDD /* PressureCollectionViewCell.swift in Sources */,
 				15AF6CE52B87A82000F9ADDD /* Weather.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
